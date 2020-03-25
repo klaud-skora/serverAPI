@@ -1,5 +1,6 @@
 const express = require('express');
 const uuid = require("uuid/v4")
+var cors = require('cors')
 const db = require('./db');
 const testimonialsRoutes = require('./routes/testimonials.routes');
 const concertsRoutes = require('./routes/concerts.router');
@@ -7,6 +8,7 @@ const seatsRoutes = require('./routes/seats.routes');
 
 const app = express();
 
+app.use(cors());
 app.use(express.urlencoded( {extended: true} ));
 app.use(express.json());
 
