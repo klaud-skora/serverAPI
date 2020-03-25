@@ -20,9 +20,15 @@ router.route('/seats/:id').get((req, res) => {
 router.route('/seats').post((req, res) => {
   const { day, seat, client, email } = req.body;
   
-  if(day && seat && email) {
-    db.seats.push({ id: uuid().replace(/[^0-9,.]+/g, ''), day: day, seat: seat, client: client, email: email });
-    res.json({message: 'OK'});
+  if(day && seat && email && client) {
+
+    if(response.body.some(() => {return (db.seats.seat == seat && db.seats.day == day)})) {
+      res.json({message: "The slot is already taken..."});
+    } else {
+      db.seats.push({ id: uuid().replace(/[^0-9,.]+/g, ''), day: day, seat: seat, client: client, email: email });
+      res.json({message: 'OK'});
+    }
+
   } else {
     res.json({message: 'Please, add needed data'});
   }
