@@ -1,5 +1,4 @@
 const express = require('express');
-const uuid = require("uuid/v4")
 var cors = require('cors')
 const db = require('./db');
 const testimonialsRoutes = require('./routes/testimonials.routes');

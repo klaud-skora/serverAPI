@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
+const uuid = require("uuid/v4")
 
 router.route('/seats').get((req, res) => {
   res.json(db.seats);
@@ -16,22 +17,20 @@ router.route('/seats/:id').get((req, res) => {
   
   res.json(db.seats[arrayElement]);
 });
-  
+
 router.route('/seats').post((req, res) => {
   const { day, seat, client, email } = req.body;
-  
-  if(day && seat && email && client) {
 
-    if(response.body.some(() => {return (db.seats.seat == seat && db.seats.day == day)})) {
-      res.json({message: "The slot is already taken..."});
+    if(day && seat && email && client) {
+      if(db.seats.some((element => { return (element.seat == seat && element.day == day)}))) {
+        res.json({message: "The slot is already taken..."});
+      } else {
+        db.seats.push({ id: uuid().replace(/[^0-9,.]+/g, ''), day: day, seat: seat, client: client, email: email });
+        res.json({message: 'OK'});
+      }
     } else {
-      db.seats.push({ id: uuid().replace(/[^0-9,.]+/g, ''), day: day, seat: seat, client: client, email: email });
-      res.json({message: 'OK'});
+      res.json({message: 'Please, add needed data'});
     }
-
-  } else {
-    res.json({message: 'Please, add needed data'});
-  }
 });
   
 router.route('/seats/:id').delete((req, res) => {
