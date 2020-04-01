@@ -5,14 +5,31 @@ import io from 'socket.io-client';
 import './SeatChooser.scss';
 
 class SeatChooser extends React.Component {
+
+  state = {
+    allSeats: 50,
+  };
   
   componentDidMount() {
     const { loadSeats, loadSeatsData } = this.props;
+    
     this.socket = io.connect(process.env.ENV_NODE || 'http://localhost:8000');
-
     
     loadSeats();
-    this.socket.on('seatsUpdated', (seats) => { loadSeatsData(seats)});
+    
+    this.socket.on('seatsUpdated', (seats) => { 
+      loadSeatsData(seats); 
+    });
+  }
+
+  getFreeSeats = () => {
+    const { seats, chosenDay } = this.props;
+    const { allSeats } = this.state;
+    const takenSeats = seats.filter(seat => {return seat.day === chosenDay});
+
+    let freeSeats = allSeats - takenSeats.length;
+
+    return freeSeats;
   }
 
   isTaken = (seatId) => {
@@ -25,19 +42,21 @@ class SeatChooser extends React.Component {
     const { chosenSeat, updateSeat } = this.props;
     const { isTaken } = this;
 
+
     if(seatId === chosenSeat) return <Button key={seatId} className="seats__seat" color="primary">{seatId}</Button>;
-    else if(isTaken(seatId)) return <Button key={seatId} className="seats__seat" disabled color="secondary">{seatId}</Button>;
+    else if(isTaken(seatId)) return  <Button key={seatId} className="seats__seat" disabled color="secondary">{seatId}</Button>;
     else return <Button key={seatId} color="primary" className="seats__seat" outline onClick={(e) => updateSeat(e, seatId)}>{seatId}</Button>;
   }
 
   render() {
-
+    const { allSeats } = this.state;
     const { prepareSeat } = this;
     const { requests } = this.props;
 
     return (
       <div>
         <h3>Pick a seat</h3>
+        { (requests['LOAD_SEATS'] && requests['LOAD_SEATS'].success) ? <p>Free seats: {`${this.getFreeSeats()}/${allSeats}`}</p> : '' }
         <small id="pickHelp" className="form-text text-muted ml-2"><Button color="secondary" /> – seat is already taken</small>
         <small id="pickHelpTwo" className="form-text text-muted ml-2 mb-4"><Button outline color="primary" /> – it's empty</small>
         { (requests['LOAD_SEATS'] && requests['LOAD_SEATS'].success) && <div className="seats">{[...Array(50)].map((x, i) => prepareSeat(i+1) )}</div>}
