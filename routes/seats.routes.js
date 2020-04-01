@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
-const uuid = require("uuid/v4")
+const { v4: uuid } = require('uuid');
 
 router.route('/seats').get((req, res) => {
   res.json(db.seats);
@@ -26,9 +26,7 @@ router.route('/seats').post((req, res) => {
         res.json({message: "The slot is already taken..."});
       } else {
         db.seats.push({ id: uuid().replace(/[^0-9,.]+/g, ''), day: day, seat: seat, client: client, email: email });
-        req.io.emit('seatsUpdated', () => {
-          res.send(db.seats);
-        });
+        req.io.emit('seatsUpdated', db.seats);
         res.json({message: 'OK'});
       }
     } else {
