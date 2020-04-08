@@ -11,9 +11,9 @@ exports.getAll = async (req, res) => {
 
 exports.getId = async (req, res) => {
   try {
-    const dep = await Concert.findById(req.params.id);
-    if(!dep) res.status(404).json({ message: 'Not found' });
-    else res.json(dep);
+    const concert = await Concert.findById(req.params.id);
+    if(!concert) res.status(404).json({ message: 'Not found' });
+    else res.json(concert);
   }
   catch(err) {
     res.status(500).json({ message: err });
@@ -34,8 +34,8 @@ exports.postDoc = async (req, res) => {
 
 exports.deleteId = async (req, res) => {
   try {
-    const dep = await Concert.findById(req.params.id);
-    if(!dep) res.status(404).json({ message: 'Not found' });
+    const concert = await Concert.findById(req.params.id);
+    if(!concert) res.status(404).json({ message: 'Not found' });
     else {
       await Concert.deleteOne({ _id: req.params.id});
       res.json({ message: 'OK' });
@@ -49,8 +49,8 @@ exports.deleteId = async (req, res) => {
 exports.putId = async (req, res) => {
   const { performer, genre, price, day, image } = req.body;
   try {
-    const dep = await Concert.findById(req.params.id);
-    if(!dep) res.status(404).json({ message: 'Not found' });
+    const concert = await Concert.findById(req.params.id);
+    if(!concert) res.status(404).json({ message: 'Not found' });
     else {
       await Concert.updateOne({ _id: req.params.id }, { $set: { performer: performer, genre: genre, price: price, day: day, image: image } });
       res.json({ message: 'OK' });
