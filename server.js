@@ -20,7 +20,7 @@ app.use((req, res, next) => {
   next();
 });
 
-//app.use('/api', testimonialsRoutes);
+app.use('/api', testimonialsRoutes);
 app.use('/api', concertsRoutes);
 app.use('/api', seatsRoutes);
 
