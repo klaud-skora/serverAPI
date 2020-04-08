@@ -14,8 +14,12 @@ exports.getRandom = async (req, res) => {
     const count = await Testimonial.find().countDocuments();
     const random = Math.floor(Math.round() * count);
     const testimonial = await Testimonial.findOne().skip(random);
-    if(!testimonial) res.status(404).json({ message: 'Not found' });
-    else res.json(testimonial);
+    if(!testimonial) {
+      res.status(404).json({ message: 'Not found' });
+    }
+    else {
+      res.json(testimonial);
+    }
   }
   catch(err) {
     res.status(500).json({ message: err });
@@ -25,8 +29,12 @@ exports.getRandom = async (req, res) => {
 exports.getId = async (req, res) => {
   try {
     const testimonial = await Testimonial.findById(req.params.id);
-    if(!testimonial) res.status(404).json({ message: 'Not found' });
-    else res.json(testimonial);
+    if(!testimonial) {
+      res.status(404).json({ message: 'Not found' });
+    }
+    else {
+      res.json(testimonial);
+    }
   }
   catch(err) {
     res.status(500).json({ message: err });
