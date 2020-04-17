@@ -5,17 +5,21 @@
   "license": "MIT",
   "scripts": {
     "start": "node server.js",
-    "build": "cd client && yarn install && yarn build"
+    "build": "cd client && yarn install && yarn build",
+    "test": "snyk test"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "helmet": "3.21.1",
+    "mongo-sanitize": "1.0.1",
     "mongodb": "3.3.2",
-    "mongoose": "5.7.1",
+    "mongoose": "5.7.5",
     "socket.io": "2.2.0",
     "uuid": "^7.0.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "snyk": "^1.305.1"
   }
 }

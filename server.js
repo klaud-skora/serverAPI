@@ -6,12 +6,14 @@ const concertsRoutes = require('./routes/concerts.router');
 const seatsRoutes = require('./routes/seats.routes');
 const socket = require('socket.io');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
 
 const app = express();
-
+app.use(helmet());
 app.use(cors());
 app.use(express.urlencoded( {extended: true} ));
 app.use(express.json());
+
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '/client/build')));
 
@@ -32,7 +34,10 @@ app.use((req, res) => {
   res.status(404).json({message: 'Not found...'});
 });
 
-mongoose.connect('mongodb+srv://klaudia:klaudiaskora@cluster0-9fa1i.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true, dbName: 'NewWaveDB' });
+process.env === 'production'
+? mongoose.connect(`mongodb+srv://${process.env.GITHUB_USERNAME}:${process.env.PASSWORD}@cluster0-9fa1i.mongodb.net/test?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true, dbName: 'NewWaveDB' })
+: mongoose.connect('mongodb://localhost:27017/NewWaveDB', { useNewUrlParser: true, useUnifiedTopology: true, dbName: 'NewWaveDB' });
+
 const db = mongoose.connection;
 
 db.once('open', () => {
