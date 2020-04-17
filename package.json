@@ -6,15 +6,21 @@
   "scripts": {
     "start": "node server.js",
     "build": "cd client && yarn install && yarn build",
-    "test": "snyk test"
+    "test": "snyk test",
+    "watch": "mocha \"./{,!(node_modules)/**/}*.test.js\""
   },
   "dependencies": {
+    "chai": "4.2.0",
+    "chai-http": "4.3.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "helmet": "3.21.1",
+    "mocha": "6.2.1",
     "mongo-sanitize": "1.0.1",
     "mongodb": "3.3.2",
+    "mongodb-memory-server": "^6.5.2",
     "mongoose": "5.7.5",
+    "onchange": "6.1.0",
     "socket.io": "2.2.0",
     "uuid": "^7.0.2"
   },
