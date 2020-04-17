@@ -1,4 +1,4 @@
-const server = require('../../../server');
+const server = require('../../server.js');
 const Concert = require('../../models/concert.model');
 
 const chai = require('chai');
